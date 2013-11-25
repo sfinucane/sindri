@@ -1,0 +1,12 @@
+﻿# application builds
+build/*
+dist/*
+MANIFEST
+
+# python skin
+*.pyc
+*.pyo
+
+# osx noise
+.DS_Store
+profile
