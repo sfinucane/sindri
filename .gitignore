@@ -10,3 +10,10 @@ MANIFEST
 # osx noise
 .DS_Store
 profile
+
+*~
+__pycache__
+
+*egg-info
+*
+_past*
