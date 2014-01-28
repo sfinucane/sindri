@@ -18,7 +18,7 @@
     :copyright: 2013 by Sindri Authors, see AUTHORS for more details.
     :license: LGPL, see LICENSE for more details.
 """
-import sys
+import sys, os
 import pint
 import lantz
 import pkg_resources
