@@ -166,7 +166,63 @@ class IEEE4882SubsetMixin(object):
 class _11713C(object):
     """
     """
-    pass
+    @Action()
+    def close_paths(self, *args):
+        """Close (set HIGH) the specified switch paths.
+        
+        There are two available banks on the 11713C, but this action does NOT
+        prevent you from trying others.
+        
+        :param: paths_list
+        :type list:
+        :description: A list of switch paths (bank+channel), per the instrument manual.
+        """
+        paths_list = self._generate_paths_list(*args)
+        self.send(":ROUTE:CLOSE (@{0})".format(','.join(paths_list)))
+
+    @Action()
+    def open_paths(self, *args):
+        """Open (set LOW/GND) the specified switch path
+        
+        There are two available banks on the 11713C, but this action does NOT
+        prevent you from trying others.
+        
+        :param: paths_list
+        :type list:
+        :description: A list of switch paths (bank+channel), per the instrument manual.
+        """
+        paths_list = self._generate_paths_list(*args)
+        self.send(":ROUTE:OPEN (@{0})".format(','.join(paths_list)))
+        
+    @Action()
+    def get_states(self, *args):
+        """Get the state of each specified switch path (opened|closed)
+        
+        There are two available banks on the 11713C, but this action does NOT
+        prevent you from trying others.
+        
+        :param: paths_list
+        :type list:
+        :description: A list of switch paths (bank+channel), per the instrument manual.
+        """
+        paths_list = self._generate_paths_list(*args)
+        response = self.query(":ROUTE:OPEN? (@{0})".format(','.join(paths_list)))
+        response_list = response.split(',')
+        state_map = {'0': 'closed', '1': 'opened'}
+        states_list = [state_map[x] for x in response_list]
+        return states_list
+        
+    @Action()
+    def close_all_paths(self):
+        """Close (set HIGH) ALL paths.
+        """
+        self.send(":ROUTE:CLOSE:ALL")
+        
+    @Action()
+    def open_all_paths(self):
+        """Open (set LOW/GND) ALL paths.
+        """
+        self.send(":ROUTE:OPEN:ALL")
 
 
 class _11713C_TCP(_11713C, ErrorQueueImplementation, 
